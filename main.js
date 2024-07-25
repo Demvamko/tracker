@@ -1,21 +1,13 @@
-const path = require('path');
-const express = require('express');
+const http = require('http');
+const fs = require('fs');
 
-const app = express();
+let count = 0;
 
-let counter = 0;
+http.createServer(function (req, res) {
+    console.log("Request: ", req.url, ", Count: ", count++);
 
-app.use((req, res, next) => {
-    console.log("Accessed: ", req.url, ", Counter: ", counter++);
-    next();
-});
+    res.writeHead(200, { 'content-type': 'image/gif' });
+    fs.createReadStream('./public/test.gif').pipe(res);
+}).listen(80);
 
-app.use("/", express.static(__dirname));
-
-app.use((req, res) => {
-    res.send({ message: "Here" });
-})
-
-app.listen(80);
-
-console.log("Started");
+console.log('server running at 80');
