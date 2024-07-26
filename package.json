@@ -17,5 +17,6 @@
   },
   "homepage": "https://github.com/Demvamko/tracker#readme",
   "dependencies": {
+    "express": "^4.19.2"
   }
 }
