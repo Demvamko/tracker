@@ -1,13 +1,21 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 
-let count = 0;
+let counts = {};
+let app = express();
 
-http.createServer(function (req, res) {
-    console.log("Request: ", req.url, ", Count: ", count++);
+app.use((req, res, next) => {
+    console.log("Headers: ", req.headers);
+    console.log("IP: ", req.ip);
+    console.log("IPs: ", req.ips);
+    console.log("Original Url: ", req.originalUrl)
+    console.log("Query: ", req.query)
 
-    res.writeHead(200, { 'content-type': 'image/gif' });
-    fs.createReadStream('./public/test.gif').pipe(res);
-}).listen(80);
+    if(counts[req.originalUrl])
+        counts[req.originalUrl]++;
+    else
+        counts[req.originalUrl] = 1;
 
-console.log('server running at 80');
+    res.sendFile(__dirname + "/public/test.gif");
+});
+
+app.listen(80, () => console.log("Running at 80"));
